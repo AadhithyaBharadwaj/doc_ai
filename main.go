@@ -49,6 +49,7 @@ func main() {
 	// API endpoint for submitting details
 	http.HandleFunc("/api/submit-details", submitDetailsHandler)
 
+	//Change this to preffered port
 	fmt.Println("Server is running on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
