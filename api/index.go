@@ -41,15 +41,6 @@ func submitDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, response)
 }
 
-func Handler(w http.ResponseWriter, r *http.Request) {
-	switch r.URL.Path {
-	case "/api/submit-details":
-		submitDetailsHandler(w, r)
-	default:
-		http.Error(w, "Not found", http.StatusNotFound)
-	}
-}
-
 func response(formData FormData) string {
 	if formData.Symptoms == "fine" ||
 		formData.Symptoms == "great" ||
@@ -59,6 +50,10 @@ func response(formData FormData) string {
 	} else {
 		return fmt.Sprintf("Well, %s, the solution is to take rest.", formData.FirstName)
 	}
+}
+
+func Handler(w http.ResponseWriter, r *http.Request) {
+	submitDetailsHandler(w, r)
 }
 
 func main() {
