@@ -3,7 +3,7 @@ name: build and deploy
 on:
   push:
     branches: 
-      - maaster
+      - master
   pull_request:
     branches: 
       - master
