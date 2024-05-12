@@ -23,6 +23,12 @@ jobs:
 
     - name: Test Go
       run: go test -v ./...
+      
+    - name: Upload Artifact
+      uses: actions/upload-pages-artifact@v1
+      with:
+        # location of the coverage artifacts
+        path: "./static"
 
   deploy:
     environment:
