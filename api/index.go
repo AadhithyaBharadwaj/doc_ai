@@ -1,4 +1,4 @@
-package main
+package handler
 
 import (
 	"encoding/json"
@@ -54,9 +54,4 @@ func response(formData FormData) string {
 
 func Handler(w http.ResponseWriter, r *http.Request) {
 	submitDetailsHandler(w, r)
-}
-
-func main() {
-	http.HandleFunc("/", Handler)
-	http.ListenAndServe(":8080", nil)
 }
