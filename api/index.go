@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 )
 
@@ -42,16 +41,13 @@ func submitDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, response)
 }
 
-func main() {
-	// Serve static files (HTML, CSS, JavaScript) from the "static" directory
-	http.Handle("/", http.FileServer(http.Dir("static")))
-
-	// API endpoint for submitting details
-	http.HandleFunc("/api/submit-details", submitDetailsHandler)
-
-	//Change this to preffered port
-	fmt.Println("Server is running on port 8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+func Handler(w http.ResponseWriter, r *http.Request) {
+	switch r.URL.Path {
+	case "/api/submit-details":
+		submitDetailsHandler(w, r)
+	default:
+		http.Error(w, "Not found", http.StatusNotFound)
+	}
 }
 
 func response(formData FormData) string {
@@ -59,8 +55,13 @@ func response(formData FormData) string {
 		formData.Symptoms == "great" ||
 		formData.Symptoms == "nice" ||
 		formData.Symptoms == "okay" {
-		return fmt.Sprint("Well, " + formData.FirstName + ", I'm glad to hear that you're feeling fine! If you have any concerns or questions in the future, feel free to reach out. Take care!\nThank you for using Doc AI. If you encounter any bugs or errors, please feel free to report to asdfghjk@yahoo.com so that we can squash them.\nIf you feel you need personal advice, please contact the below doctors:\nBabs: 34567894567")
+		return fmt.Sprintf("Well, %s, I'm glad to hear that you're feeling fine! If you have any concerns or questions in the future, feel free to reach out. Take care!\nThank you for using Doc AI. If you encounter any bugs or errors, please feel free to report to asdfghjk@yahoo.com so that we can squash them.\nIf you feel you need personal advice, please contact the below doctors:\nBabs: 34567894567", formData.FirstName)
 	} else {
-		return fmt.Sprint("Well, " + formData.FirstName + ", the solution is to take rest.")
+		return fmt.Sprintf("Well, %s, the solution is to take rest.", formData.FirstName)
 	}
+}
+
+func main() {
+	http.HandleFunc("/", Handler)
+	http.ListenAndServe(":8080", nil)
 }
